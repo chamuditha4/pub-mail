@@ -1,0 +1,21 @@
+{
+  "name": "@tmp-mail/database",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@tmp-mail/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250110.0",
+    "vitest": "^2.1.8"
+  }
+}

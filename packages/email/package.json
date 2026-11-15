@@ -1,0 +1,22 @@
+{
+  "name": "@tmp-mail/email",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "postal-mime": "^2.4.0",
+    "xss": "^1.0.15"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250110.0",
+    "vitest": "^2.1.8"
+  }
+}

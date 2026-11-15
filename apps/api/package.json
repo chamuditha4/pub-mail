@@ -1,0 +1,30 @@
+{
+  "name": "@tmp-mail/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "wrangler deploy --dry-run --outdir dist",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "typecheck": "tsc -b --pretty",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@hono/swagger-ui": "^0.5.0",
+    "@hono/zod-openapi": "^0.18.3",
+    "@tmp-mail/contracts": "workspace:*",
+    "@tmp-mail/database": "workspace:*",
+    "@tmp-mail/email": "workspace:*",
+    "@tmp-mail/security": "workspace:*",
+    "@tmp-mail/shared": "workspace:*",
+    "hono": "^4.6.15",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.5.40",
+    "@cloudflare/workers-types": "^4.20250110.0",
+    "vitest": "^2.1.8",
+    "wrangler": "^4.114.0"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@tmp-mail/mail-processor",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "wrangler deploy --dry-run --outdir dist",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "typecheck": "tsc -b --pretty",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@tmp-mail/database": "workspace:*",
+    "@tmp-mail/email": "workspace:*",
+    "@tmp-mail/security": "workspace:*",
+    "@tmp-mail/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.5.40",
+    "@cloudflare/workers-types": "^4.20250110.0",
+    "vitest": "^2.1.8",
+    "wrangler": "^4.114.0"
+  }
+}

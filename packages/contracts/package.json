@@ -1,0 +1,21 @@
+{
+  "name": "@tmp-mail/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@hono/zod-openapi": "^0.18.3",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}

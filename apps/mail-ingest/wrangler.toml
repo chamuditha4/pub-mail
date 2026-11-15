@@ -1,0 +1,26 @@
+name = "tmp-mail-ingest"
+main = "src/index.ts"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
+
+# This Worker is attached as the destination of a per-domain catch-all Email
+# Routing rule (CLAUDE.md §3). It receives email, streams raw MIME to R2, writes
+# a minimal record, and enqueues a processing job. It never parses MIME.
+
+[vars]
+APP_ENV = "development"
+MAX_MESSAGE_BYTES = "15728640"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tmp-mail"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+migrations_dir = "../../migrations"
+
+[[r2_buckets]]
+binding = "MAIL_RAW_BUCKET"
+bucket_name = "tmp-mail-raw"
+
+[[queues.producers]]
+binding = "EMAIL_PROCESSING_QUEUE"
+queue = "email-processing"

@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "outDir": "dist",
+    "lib": ["ES2022"],
+    "types": ["@cloudflare/workers-types", "@cloudflare/vitest-pool-workers"],
+    "noEmit": false
+  },
+  "references": [
+    { "path": "../../packages/shared" },
+    { "path": "../../packages/contracts" },
+    { "path": "../../packages/security" },
+    { "path": "../../packages/email" },
+    { "path": "../../packages/database" }
+  ],
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "exclude": ["dist"]
+}

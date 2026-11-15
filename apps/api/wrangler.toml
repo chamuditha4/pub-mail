@@ -1,0 +1,52 @@
+name = "tmp-mail-api"
+main = "src/index.ts"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
+
+# Served at api.example.com via a Workers Custom Domain (managed DNS).
+routes = [{ pattern = "api.example.com", custom_domain = true }]
+workers_dev = true
+
+# Non-secret configuration. Secrets (TOKEN_PEPPER, GOOGLE_CLIENT_SECRET, ...) are
+# set via `wrangler secret put` and never committed (CLAUDE.md §20).
+[vars]
+APP_ENV = "staging"
+APP_BASE_URL = "https://app.example.com"
+API_BASE_URL = "https://api.example.com"
+# Additional browser origins allowed by CORS (besides APP_BASE_URL) so the app
+# also works from the workers.dev URL and the apex.
+CORS_ORIGINS = "https://example.com"
+# Anonymous inboxes default to 24h (max), so they don't expire mid-test.
+DEFAULT_INBOX_TTL_SECONDS = "86400"
+MIN_INBOX_TTL_SECONDS = "600"
+MAX_INBOX_TTL_SECONDS = "86400"
+# Persistent addresses for signed-in users (30 days).
+USER_INBOX_TTL_SECONDS = "2592000"
+# Rate limits (CLAUDE.md §15).
+ANON_INBOX_CREATIONS_PER_HOUR = "20"
+API_REQUESTS_PER_MINUTE = "120"
+# Webhook secret encryption (dev value; production sets a Worker secret).
+WEBHOOK_SECRET_ENCRYPTION_KEY = "REPLACE-ME-set-a-wrangler-secret-0000"
+MAX_MESSAGE_BYTES = "15728640"
+# Development-only pepper. Production sets this as a secret.
+TOKEN_PEPPER = "REPLACE-ME-set-a-wrangler-secret-000"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tmp-mail"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+migrations_dir = "../../migrations"
+
+[[r2_buckets]]
+binding = "MAIL_ATTACHMENT_BUCKET"
+bucket_name = "tmp-mail-attachments"
+
+# Raw MIME, so deleting a domain can purge its stored messages from R2.
+[[r2_buckets]]
+binding = "MAIL_RAW_BUCKET"
+bucket_name = "tmp-mail-raw"
+
+# Producer for webhook test deliveries (consumed by mail-processor).
+[[queues.producers]]
+binding = "WEBHOOK_DELIVERY_QUEUE"
+queue = "webhook-delivery"
