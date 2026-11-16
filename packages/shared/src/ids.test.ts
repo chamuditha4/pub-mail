@@ -19,4 +19,9 @@ describe('ulid', () => {
     const b = ulid(1234);
     expect(a).not.toEqual(b);
   });
+
+  it('sorts ids minted in the same millisecond in creation order', () => {
+    const ids = Array.from({ length: 50 }, () => ulid(5678));
+    expect([...ids].sort()).toEqual(ids);
+  });
 });

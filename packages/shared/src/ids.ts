@@ -19,20 +19,43 @@ function encodeTime(now: number): string {
   return str;
 }
 
-function encodeRandom(): string {
+function randomDigits(): number[] {
   const bytes = new Uint8Array(RANDOM_LEN);
   crypto.getRandomValues(bytes);
-  let str = '';
-  for (let i = 0; i < RANDOM_LEN; i++) {
-    // Map each random byte into the 32-symbol alphabet.
-    str += ENCODING[bytes[i]! % ENCODING_LEN];
+  // Map each random byte into the 32-symbol alphabet.
+  return Array.from(bytes, (b) => b % ENCODING_LEN);
+}
+
+// Monotonic within a millisecond (ULID spec): a second id generated in the same
+// millisecond is the previous random part + 1, so ids sort in creation order
+// even when many are minted back to back. Without this, same-millisecond ids
+// order randomly and "newest first" listings flake on fast machines.
+let lastTime = -1;
+let lastDigits: number[] = [];
+
+function incrementDigits(digits: number[]): boolean {
+  for (let i = digits.length - 1; i >= 0; i--) {
+    if (digits[i]! < ENCODING_LEN - 1) {
+      digits[i] = digits[i]! + 1;
+      return true;
+    }
+    digits[i] = 0;
   }
-  return str;
+  return false; // overflow
 }
 
 /** Generate a 26-character ULID. */
 export function ulid(now: number = Date.now()): string {
-  return encodeTime(now) + encodeRandom();
+  let digits: number[];
+  if (now === lastTime) {
+    digits = lastDigits.slice();
+    if (!incrementDigits(digits)) digits = randomDigits(); // 2^80 ids in one ms: effectively unreachable
+  } else {
+    digits = randomDigits();
+  }
+  lastTime = now;
+  lastDigits = digits;
+  return encodeTime(now) + digits.map((d) => ENCODING[d]).join('');
 }
 
 const ULID_RE = /^[0-9A-HJKMNP-TV-Z]{26}$/;
